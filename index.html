@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="main.js"></script> -->
+    <script src="convert.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+ <div class="convertor">
+    <div class="currency-header">
+        <h4> ვალუტის კონვერტორი </h4>
+    </div> <br>
+   
+    
+   
+   
+   <form name="currency">
+        <table border="0" cellpadding="0" cellspacing="3" class="calculator">
+            <tbody><tr>
+              <td width="30">
+                <img src="images/EUR.gif" alt="EURO"/>
+              </td>
+              <td width="30">
+                EUR
+              </td>
+              <td width="100">
+                <input name="c0"  size="40" onkeyup="currency_convert(0);" type="text" class="costum_input"/>
+              </td>
+            </tr>
+            <tr>
+            </tr><tr>
+              <td>
+                <img src="images/USD.gif" alt="USD"/>
+              </td>
+              <td>
+                USD
+              </td>
+              <td>
+                <input name="c1"  size="40" onkeyup="currency_convert(1);" type="text" class="costum_input"/>
+              </td>
+            </tr>
+            <tr>
+            </tr><tr>
+              <td>
+                <img src="images/GEL.gif" alt="GEL"/>
+              </td>
+              <td>
+                GEL
+              </td>
+              <td>
+                <input name="c2"  size="40" onkeyup="currency_convert(2);" type="text" class="costum_input"/>
+              </td>
+            </tr>
+            <tr>
+            </tr><tr>
+              <td>
+                <img src="images/RUR.gif" alt="RUB"/>
+              </td>
+              <td>
+                RUB
+              </td>
+              <td>
+                <input name="c3"  size="40" onkeyup="currency_convert(3);" type="text" class="costum_input"/>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+    </form>
+ </div>   
+</body>
+<script>
+  var usd_u;
+  var eur_e;
+  var rub_r;
+  var gel_g;
+  $.ajax({
+      url: "https://gist.githubusercontent.com/LukaPalelashvili/873193593c43e24a399738945d7a1a07/raw/8fc79eac786b6eb1ac9a194e300a951f081778c5/main.js",
+      type: "GET",
+      dataType: 'json',
+      async: false,
+      success: function(data){
+          usd_u = data["USD"];
+          eur_e = data["EUR"];
+          rub_r = data["RUB"];
+          gel_g = data["GEL"];
+          // currency_convert(origin)  
+      },
+      error: function(){
+          $('.timeline').text('failt to get feed');
+      }
+      });
+      console.log("დატესტვა ფუნქციის გარეთ" + eur_e);
+          var rate = new Array(1/eur_e, 1/usd_u, 1/gel_g, 1/rub_r);
+          function currency_convert(origin){
+          console.log("shemovedi meore funqciashi");
+          var origin_value = eval('document.currency.c'+origin+'.value');
+          if(true)//(/^\d+(\.\d+)?$/.test(origin_value))
+          {
+              var euro_equivalent = rate[origin];
+              var v;
+              for (i=0; i < rate.length; i++)
+              {
+                  if (i != origin)
+                  {
+                      v = Math.round(rate[i]*origin_value/euro_equivalent*10000)/10000;
+                      eval('document.currency.c'+i+'.value = '+v);
+
+                      
+                  }
+              }
+          }
+          else
+          {
+              eval('document.currency.c'+origin+'.value = 0');
+              currency_convert(origin);
+              alert("wrong data");
+          }
+          return true;
+      }
+     
+  console.log("ეს ამოვიღე" + " " );
+
+</script>
+</html>
